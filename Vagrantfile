@@ -28,8 +28,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--nictype1", "Am79C973"]
     vb.gui    = false
-    vb.memory = 2048
-    vb.cpus   = 1
+    vb.memory = 3072
+    vb.cpus   = 2
   end
 
   config.ssh.username = "vagrant"
