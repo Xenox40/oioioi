@@ -202,6 +202,7 @@ class Round(models.Model):
             help_text=_("Participants may learn about others' results, "
                 "what exactly happens depends on the type of the contest "
                 "(eg. rankings, contestants' solutions are published)."))
+    can_submit_after_end = models.BooleanField(default=False, verbose_name="accept submissions after the round ends")
     is_trial = models.BooleanField(default=False, verbose_name=_("is trial"))
 
     class Meta(object):
@@ -266,6 +267,7 @@ class ProblemInstance(models.Model):
         default=settings.DEFAULT_SUBMISSIONS_LIMIT,
         help_text=_("Use 0 for unlimited submissions."),
         verbose_name=_("submissions limit"))
+    score_weight = models.DecimalField(default=1.0, decimal_places=2, verbose_name="score weight", max_digits=5, null=True, blank=True)
 
     # set on True only when problem_instace's tests were overriden but there
     # are some submissions judged on old tests
@@ -370,7 +372,11 @@ class Submission(models.Model):
     def get_score_display(self):
         if self.score is None:
             return None
-        return self.problem_instance.controller.render_submission_score(self)
+        r = self.problem_instance.controller.render_submission_score(self)
+        w = self.problem_instance.score_weight or 1.0
+        if w != 1.0:
+            r += u' (\u00D7%.2f)'%float(w)
+        return r
 
     def __str__(self):
         return u"Submission(%d, %s, %s, %s, %s, %s)" % (
@@ -421,7 +427,9 @@ class ScoreReport(models.Model):
     def get_score_display(self):
         if self.score is None:
             return ''
-        return six.text_type(self.score)
+        r = six.text_type(self.score)
+        r += ';'
+        return r
 
 
 class FailureReport(models.Model):

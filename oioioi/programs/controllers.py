@@ -880,6 +880,14 @@ class ProgrammingContestController(ContestController):
         return super(ProgrammingContestController, self) \
                 .valid_kinds_for_submission(submission)
 
+    def get_max_score(self, problem_instance):
+        groups = dict()
+
+        for test in problem_instance.test_set.filter(is_active = True):
+            groups[test.group] = test.max_score
+
+        return sum(groups.values())
+
     def get_safe_exec_mode(self):
         """Determines execution mode when `USE_UNSAFE_EXEC` is False.
 
