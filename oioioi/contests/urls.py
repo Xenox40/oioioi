@@ -3,6 +3,7 @@ from importlib import import_module
 from django.conf import settings
 from django.conf.urls import include, url
 
+from oioioi.base.utils import is_internal_app_name
 from oioioi.contests import admin, views, api
 
 app_name = 'contests'
@@ -146,7 +147,7 @@ if settings.USE_API:
     ]
 
 for app in settings.INSTALLED_APPS:
-    if app.startswith('oioioi.'):
+    if is_internal_app_name(app):
         try:
             urls_module = import_module(app + '.urls')
             if hasattr(urls_module, 'contest_patterns'):

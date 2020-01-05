@@ -6,6 +6,7 @@ import django.dispatch
 # pylint: disable=unused-import
 # Important. This import is to register signal handlers. Do not remove it.
 import oioioi.base.signal_handlers
+from oioioi.base.utils import is_internal_app_name
 from oioioi.base.setup_check import setup_check
 
 # Check if deployment and installation config versions match.
@@ -13,7 +14,7 @@ from oioioi.base.setup_check import setup_check
 setup_check()
 
 for app in settings.INSTALLED_APPS:
-    if app.startswith('oioioi.'):
+    if is_internal_app_name(app):
         try:
             # Controllers should be imported at startup, because they register
             # mixins

@@ -190,6 +190,9 @@ COMPRESS_PRECOMPILERS = (
 
 LIBSASS_PRECISION = 8
 
+# List of allowd apps prefixes
+INTERNAL_APPS_PREFIXES = ['oioioi.']
+
 INSTALLED_APPS = (
     'debug_toolbar',
     'oioioi.filetracker',
