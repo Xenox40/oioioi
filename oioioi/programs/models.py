@@ -158,6 +158,22 @@ class ModelSolution(models.Model):
     def short_name(self):
         return self.name.rsplit('.', 1)[0]
 
+    def recreate_model_submissions(self, problem_instance):
+        with transaction.atomic():
+            for model_submission in ModelProgramSubmission.objects.filter(
+                    problem_instance=problem_instance, model_solution=self):
+                model_submission.delete()
+        with transaction.atomic():
+            submission = ModelProgramSubmission(
+                    model_solution=self,
+                    problem_instance=problem_instance,
+                    source_file=self.source_file,
+                    kind='IGNORED')
+            submission.save()
+            problem_instance.controller.judge(submission, is_rejudge=True)
+
+
+
 
 @receiver(pre_save, sender=ProblemInstance)
 def _decide_if_autocreate_model_submissions_for_problem_instance(sender,
@@ -179,14 +195,14 @@ def _autocreate_model_submissions_for_problem_instance(sender, instance,
     if instance.create_model_submissions:
         ModelSolution.objects.recreate_model_submissions(instance)
 
-
 @receiver(post_save, sender=ModelSolution)
 def _autocreate_model_submissions_for_model_solutions(sender, instance,
         created, raw, **kwargs):
     if created and not raw:
         pis = ProblemInstance.objects.filter(problem=instance.problem)
         for pi in pis:
-            ModelSolution.objects.recreate_model_submissions(pi, instance)
+            #ModelSolution.objects.recreate_model_submissions(pi, instance)
+            instance.recreate_model_submissions(pi)
 
 
 def make_submission_filename(instance, filename):
