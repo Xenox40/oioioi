@@ -43,10 +43,10 @@ def get_times_status(request, response):
         rtimes = [(contest.controller.get_round_times(request, round), round)
                   for round in Round.objects.filter(contest=contest)]
         next_rounds_times = [(rt, round) for (rt, round)
-                             in rtimes if rt.is_future(timestamp)]
+                             in rtimes if rt.is_future(timestamp) and not rt.is_hidden()]
         next_rounds_times.sort(key=lambda rt_round: rt_round[0].get_start())
         current_rounds_times = [(rt, round) for (rt, round) in rtimes
-                                if rt.is_active(timestamp) and rt.get_end()]
+                                if rt.is_active(timestamp) and rt.get_end() and not rt.is_hidden()]
         current_rounds_times.sort(key=lambda rt_round1: rt_round1[0].get_end())
 
     if current_rounds_times:

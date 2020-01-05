@@ -87,6 +87,8 @@ class RoundTimes(object):
             return self.end + timedelta(minutes=self.extra_time)
         else:
             return self.end
+    def is_hidden(self):
+        return False
 
     def get_key_for_comparison(self):
         return self.get_start() or UTC.localize(datetime.min), \
