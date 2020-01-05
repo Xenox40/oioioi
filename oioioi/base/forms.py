@@ -51,6 +51,10 @@ class UserForm(forms.ModelForm):
         if not self.allow_login_change:
             self.fields['username'].widget.attrs.update(readonly=True)
 
+        self.fields['first_name'].widget.attrs.update(readonly=True)
+        self.fields['last_name'].widget.attrs.update(readonly=True)
+        self.fields['email'].widget.attrs.update(readonly=True)
+
         self.fields.update(extra)
 
     def clean_username(self):
@@ -61,6 +65,35 @@ class UserForm(forms.ModelForm):
             return instance.username
         else:
             return self.cleaned_data['username']
+
+    def clean_first_name(self):
+        instance = getattr(self, 'instance', None)
+        if instance:
+            if self.cleaned_data['first_name'] != instance.username:
+                raise ValidationError(_("You cannot change your first name."))
+            return instance.username
+        else:
+            return self.cleaned_data['first_name']
+
+    def clean_last_name(self):
+        instance = getattr(self, 'instance', None)
+        if instance:
+            if self.cleaned_data['last_name'] != instance.username:
+                raise ValidationError(_("You cannot change your last name."))
+            return instance.username
+        else:
+            return self.cleaned_data['last_name']
+
+    def clean_email(self):
+        instance = getattr(self, 'instance', None)
+        if instance:
+            if self.cleaned_data['email'] != instance.username:
+                raise ValidationError(_("You cannot change your email."))
+            return instance.username
+        else:
+            return self.cleaned_data['email']
+
+
 
     def save(self, *args, **kwargs):
         instance = super(UserForm, self).save(*args, **kwargs)
