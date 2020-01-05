@@ -328,7 +328,7 @@ class OioioiUserAdmin(six.with_metaclass(ModelAdminMeta, UserAdmin,
     )
     list_filter = ['is_superuser', 'is_active']
     list_display = ['username', 'email', 'first_name', 'last_name',
-            'is_active']
+            'is_active', 'is_superuser']
     filter_horizontal = ()
     actions = ['activate_user']
 
