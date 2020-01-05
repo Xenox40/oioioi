@@ -22,7 +22,7 @@ from oioioi.dashboard.models import DashboardMessage
 from oioioi.dashboard.registry import (dashboard_headers_registry,
                                        dashboard_registry)
 from oioioi.questions.views import messages_template_context, visible_messages
-from oioioi.rankings.views import has_any_ranking_visible
+#from oioioi.rankings.views import has_any_ranking_visible
 
 top_links_registry.register('problems_list', _("Problems"),
         lambda request: reverse('problems_list', kwargs={'contest_id':
@@ -36,11 +36,11 @@ top_links_registry.register('submit', _("Submit"),
         condition=has_any_submittable_problem,
         order=200)
 
-top_links_registry.register('ranking', _("Ranking"),
-        lambda request: reverse('default_ranking', kwargs={'contest_id':
-            request.contest.id}),
-        condition=has_any_ranking_visible,
-        order=300)
+# top_links_registry.register('ranking', _("Ranking"),
+#         lambda request: reverse('default_ranking', kwargs={'contest_id':
+#             request.contest.id}),
+#         condition=has_any_ranking_visible,
+#         order=300)
 
 
 @enforce_condition(contest_exists & is_contest_basicadmin)

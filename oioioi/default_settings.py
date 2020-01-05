@@ -201,7 +201,7 @@ INSTALLED_APPS = (
     'oioioi.programs',
     'oioioi.sinolpack',
     'oioioi.questions',
-    'oioioi.rankings',
+    #'oioioi.rankings',
     'oioioi.sioworkers',
     'oioioi.analytics',
     'oioioi.celery',
