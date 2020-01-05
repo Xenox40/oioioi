@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.forms import ValidationError
 from django.utils import timezone
+from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
 from oioioi.base.utils.inputs import narrow_input_field, narrow_input_fields
@@ -60,6 +61,11 @@ class SimpleContestForm(forms.ModelForm):
                 self._generate_default_dates()
         else:
             self._generate_default_dates()
+
+        old_choices = self.fields['controller_name'].choices
+        new_choices = old_choices[:1] + [(x, y) for (x, y) in old_choices[1:] if
+                getattr(import_string(x), 'visible', False)]
+        self.fields['controller_name'].choices = new_choices
 
     def clean(self):
         cleaned_data = super(SimpleContestForm, self).clean()
