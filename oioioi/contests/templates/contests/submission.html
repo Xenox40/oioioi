@@ -21,6 +21,11 @@
     {% endif %}
 {% endblock %}
 
+{% block styles %}
+{{ block.super }}
+<link href="{% static "judgings/style.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block main-content %}
 <article>
     {{ header }}
